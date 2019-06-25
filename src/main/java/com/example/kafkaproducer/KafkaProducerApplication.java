@@ -34,6 +34,7 @@ public class KafkaProducerApplication implements CommandLineRunner {
 
         for (int i = 0; i < 100; i++) {
             ProducerRecord<String, String> record = new ProducerRecord<>("hello", "spring hello consumer" + i);
+            //send event async with callback
             producer.send(record, (metadata, exception) -> {
                 if (exception == null) {
                     System.out.println("done sent " + record.value() + " at offset " + metadata.offset() + " in partition: " + metadata.partition());
@@ -41,7 +42,6 @@ public class KafkaProducerApplication implements CommandLineRunner {
                     System.out.println(exception.getMessage());
                 }
             });
-            Thread.sleep(500L);
         }
 
         System.out.println("produce done");
